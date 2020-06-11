@@ -75,3 +75,42 @@ summary(logitMod)
 #degree_p                 0.23337    0.05890   3.962 7.43e-05 ***
 #  mba_p                   -0.01546    0.06284  -0.246  0.80563    
 #employability_test       0.02713    0.02338   1.160  0.24603    
+
+
+
+
+library(tidyverse)
+campus<-select(campus,-sl_no)
+
+campus[!complete.cases(campus),] # there are NAs
+campus[is.na(campus$status),] #NAs are becasue not placed will have no salary
+
+
+barchart_function<-function(data1,x)
+{
+ggplot(data1)+
+   geom_bar(aes(x),color='black',fill='red')+
+   theme_classic()
+}
+
+barchart_function(campus,campus$specialization)
+barchart_function(campus[campus$status=="Placed",],campus[campus$status=="Placed",]$specialization)
+
+
+ggplot(campus, aes(mba_p, employability_test, color=factor(status)))+
+   geom_point(alpha= 0.5, size=3.0)+
+   xlab('mba percentage')+
+   ylab('employability test percentage')+
+   ggtitle('scatter plot visualizing masters percentage and employability test results')
+
+ggplot(campus, aes(degree_p, employability_test, color=factor(status)))+
+   geom_point(alpha= 0.5, size=3.0)+
+   xlab('degree percentage')+
+   ylab('employability test percentage')+
+   ggtitle('scatter plot visualizing graduate percentage and employability test results')
+
+# Masterspercentage is scattered. degree percentage is focussed(higher the % better the chances)
+# Marks not important in MBA?
+
+
+
