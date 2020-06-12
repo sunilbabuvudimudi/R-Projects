@@ -21,7 +21,7 @@ library(plyr)
 
 
 table(campus$status)
-#Not equal campus placed/not campus placed.
+#Not equal campus placed/not campus placed
 
 Placed<-campus[campus$status=="Placed",]
 Not_Placed<- campus[campus$status=="Not Placed",]
