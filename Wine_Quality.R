@@ -41,5 +41,6 @@ quality_factors(wines$fixed.acidity,wines$volatile.acidity)+
 
 wines$quality.num<-0
 wines[wines$quality>=6,"quality.num"]<-rep(1,855)
+# good quality=1/bad quality=0
 
 
