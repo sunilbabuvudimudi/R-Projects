@@ -18,20 +18,6 @@ library(plyr)
    xlab("mba_percent")+
    ylab("employablity_percent")
  
- 
- 
- #str(campus)
- 
- #Correlation equation
- cor(campus$mba_p,campus$degree_p) 
-
- mod <- lm(data=campus,employability_test~mba_p) 
- print(mod) 
-
- ggplot(campus)+geom_point(mapping = aes(x=degree_p,y=mba_p))+
-  #geom_abline(slope = 0.4963,intercept = 41.1943)
-  geom_abline()
-
 
 
 table(campus$status)
@@ -61,7 +47,7 @@ logitMod <- glm(status ~ gender+degree_subject+workex+specialization+degree_p+mb
                 data=trainingdata, family=binomial(link="logit"))
 
 predicted <- plogis(predict(logitMod, testdata))  # predicted scores
-
+predicted
 summary(logitMod)
 
 #Coefficients:
