@@ -18,7 +18,73 @@ wines<-read.csv("winequality-red.csv")
 #alcohol - alcohol content
 #quality - dependent variable
 
-str(wines)
+
+#unsupervised learning
+wines_features<-wines
+wines_features$quality<-NULL
+
+
+#set same scale
+wines_features<-scale(wines_features)
+view(wines_features)
+
+results<-kmeans(wines_features,6)
+view(results)
+
+table(wines$quality,results$cluster)
+#####1      2      3      4      5      6
+#3   1      2      0      0      7      0
+#4   6      4      1      4     37      1
+#5 226     96     17     45    281     16
+#6  97    177      9    162    181     12
+#7  11     78      1     81     23      5
+#8   1      7      0     10      0      0
+
+#the variables leading to quality donot align with the clusters? why?
+#Maybe because there are rules for wine quality. its not based on a pattern
+
+
+plot(wines[c("citric.acid","residual.sugar","pH")],
+     col=results$cluster)
+
+plot(wines[c("citric.acid","residual.sugar","pH")],
+     col=wines$quality)
+
+####################################
+# Lets filter only good quality wine
+wines_good<-wines[wines$quality>=6,]
+
+wines_features<-wines_good
+wines_features$quality<-NULL
+
+
+#set same scale
+wines_features<-scale(wines_features)
+view(wines_features)
+
+results<-kmeans(wines_features,3)
+view(results)
+results$size
+
+table(wines_good$quality,results$cluster)
+#     1   2   3
+#6  399 213  26
+#7   73 124   2
+#8    7  11   0
+
+#the variables leading to quality do not align with the clusters? why?
+#Though I took good quality wine subset?
+#Unknown component which determines quality of wine?
+
+
+plot(wines_good[c("citric.acid","residual.sugar")],
+     col=results$cluster)
+
+
+
+
+
+
 # scatterplot to visualize correlation between independent variables when quality is high (quality>6)
 
 quality_factors<-function(variable1,variable2){
@@ -41,6 +107,7 @@ quality_factors(wines$fixed.acidity,wines$volatile.acidity)+
 
 wines$quality.num<-0
 wines[wines$quality>=6,"quality.num"]<-rep(1,855)
-# good quality=1 & bad quality=0
+
+#quality>=6 is good & quality<6 is bad
 
 
