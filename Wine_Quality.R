@@ -101,6 +101,8 @@ quality_factors(wines$fixed.acidity,wines$volatile.acidity)+
 
 
 
+
+
 #Regression model to arrive at a formula to produce best quality wine
 
 #Assume quality>6 is good quality wine
@@ -110,4 +112,35 @@ wines[wines$quality>=6,"quality.num"]<-rep(1,855)
 
 #quality>=6 is good & quality<6 is bad
 
+#visualizing quality in histograms
+ggplot(data = wines,aes(x = quality)) +
+  geom_histogram(binwidth = 0.05) +
+  scale_x_log10()   # normal distribution
+
+
+attach(wines)
+y<-cbind(quality.num)  # dependent variables 
+x<-cbind(fixed.acidity,   # independent variables
+         volatile.acidity,
+         citric.acid,
+         residual.sugar,
+         chlorides,
+         free.sulfur.dioxide,
+         total.sulfur.dioxide,
+         density,
+         pH,
+         sulphates,
+         alcohol)
+
+summary(y)  # simple check to see how dependent variables are distributed
+
+tables(y)
+
+summary(lm(y~x))  # linear model - wrong here
+
+logitmodel<-glm(y~x,family=binomial(link = "logit"))
+summary(logitmodel)  #binomial - logistic
+
+
+exp(logitmodel$coefficients)
 
