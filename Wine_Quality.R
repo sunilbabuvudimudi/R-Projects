@@ -86,6 +86,7 @@ plot(wines_good[c("citric.acid","residual.sugar")],
 
 
 # scatterplot to visualize correlation between independent variables when quality is high (quality>6)
+#function
 
 quality_factors<-function(variable1,variable2){
   ggplot(wines,aes(x=variable1,y=variable2,color=quality))+
@@ -118,6 +119,8 @@ ggplot(data = wines,aes(x = quality)) +
   scale_x_log10()   # normal distribution
 
 
+
+#Ideally use training and testing subsets but this is experiment/WIP
 attach(wines)
 y<-cbind(quality.num)  # dependent variables 
 x<-cbind(fixed.acidity,   # independent variables
@@ -134,12 +137,51 @@ x<-cbind(fixed.acidity,   # independent variables
 
 summary(y)  # simple check to see how dependent variables are distributed
 
-tables(y)
-
 summary(lm(y~x))  # linear model - wrong here
 
 logitmodel<-glm(y~x,family=binomial(link = "logit"))
 summary(logitmodel)  #binomial - logistic
+
+
+#Call:
+#  glm(formula = y ~ x, family = binomial(link = "logit"))
+#
+#Deviance Residuals: 
+#  Min       1Q   Median       3Q      Max  
+#-3.4025  -0.8387   0.3105   0.8300   2.3142  
+#
+#Coefficients:
+#  Estimate Std. Error z value Pr(>|z|)    
+#(Intercept)            42.949948  79.473979   0.540  0.58890    
+#xfixed.acidity          0.135980   0.098483   1.381  0.16736    
+#xvolatile.acidity      -3.281694   0.488214  -6.722 1.79e-11 ***
+#  xcitric.acid           -1.274347   0.562730  -2.265  0.02354 *  
+#  xresidual.sugar         0.055326   0.053770   1.029  0.30351    
+#xchlorides             -3.915713   1.569298  -2.495  0.01259 *  
+#  xfree.sulfur.dioxide    0.022220   0.008236   2.698  0.00698 ** 
+#  xtotal.sulfur.dioxide  -0.016394   0.002882  -5.688 1.29e-08 ***
+#  xdensity              -50.932385  81.148745  -0.628  0.53024    
+#xpH                    -0.380608   0.720203  -0.528  0.59717    
+#xsulphates              2.795107   0.452184   6.181 6.36e-10 ***
+#  xalcohol                0.866822   0.104190   8.320  < 2e-16 ***
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#
+#(Dispersion parameter for binomial family taken to be 1)
+#
+#Null deviance: 2209.0  on 1598  degrees of freedom
+#Residual deviance: 1655.6  on 1587  degrees of freedom
+#AIC: 1679.6
+#
+#Number of Fisher Scoring iterations: 4
+
+
+###########################################################################################################
+# For every unit change in quality.num ie., every time wine quality moves from bad to good quality,
+#      is becasue of drop in volatile acidity, chlorides, total sulfur dioxide, density and pH   
+#########################################AND###############################################################
+# Presence of high intercept means there are other factors which cause variance in quality
+###########################################################################################################
 
 
 exp(logitmodel$coefficients)
